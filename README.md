@@ -42,31 +42,6 @@ Output Format for QL and BM25 tasks.
 
 For both tasks, a submission consists of a single text file in the format used for most TREC submissions, which we repeat here for convenience. White space is used to separate columns. The width of the columns in the format is not important, but it is important to have exactly six columns per line with at least one space between the columns.
 
-Q1 skip alls_well_that_ends_well:0.0             1 1.000 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:0.1             2 0.500 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:0.2             3 0.333 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:1.0             4 0.250 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:1.1             5 0.200 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:1.2             6 0.167 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:1.3             7 0.143 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:1.4             8 0.125 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:2.1             9 0.111 jjfoley-alphabetic
-Q1 skip alls_well_that_ends_well:2.4             10 0.100 jjfoley-alphabetic 
-...
-Q1 skip winters_tale:4.0                         399 0.003 jjfoley-alphabetic
-Q1 skip winters_tale:4.1                         400 0.003 jjfoley-alphabetic
-Q1 skip winters_tale:4.2                         401 0.002 jjfoley-alphabetic
-...
-Q2 skip alls_well_that_ends_well:0.0             1 1.000 jjfoley-alphabetic
-Q2 skip alls_well_that_ends_well:0.2             2 0.500 jjfoley-alphabetic
-Q2 skip alls_well_that_ends_well:1.0             3 0.333 jjfoley-alphabetic
-Q2 skip alls_well_that_ends_well:1.2             4 0.250 jjfoley-alphabetic
-...
-Q5 skip winters_tale:1.0                         210 0.005 jjfoley-alphabetic
-Q5 skip winters_tale:2.1                         211 0.005 jjfoley-alphabetic
-Q5 skip winters_tale:3.3                         212 0.005 jjfoley-alphabetic
-etc. where:
-
 the first column is the topic number.
 the second column is currently unused and should always be "skip".
 the third column is the scene identifier of the retrieved document.
