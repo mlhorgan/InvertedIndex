@@ -1,9 +1,9 @@
 # InvertedIndex
 
-Implement an Inverted Index with Positional Information.
+Implement an Inverted Index with Count Information.
 Dataset
 
-The dataset is the scenes from the complete works of Shakespeare. This data has been tokenized and is made available as shakespeare-scenes.json.gz on Moodle. If you're curious, the original source of the materials (from Open Shakespeare) is here.
+The dataset is the scenes from the cumulative works of Shakespeare Original Source. This data has been tokenized and is made available as shakespeare-scenes.json.gz on Moodle.
 
 This dataset has been preprocessed by stripping out punctuation and using the Krovetz Stemmer. No stopwords have been removed.
 
@@ -15,53 +15,72 @@ An example scene is below:
   "sceneNum" : 549 ,
   "text" : "scene ix another part of the plain enter mark antony and domitiu enobarbu mark antony set we our squadron on yond side o the hill in eye of caesar s battle from which place we may the number of the ship behold and so proceed accordingly exeunt "
 }
-This is from the play "Anthony and Cleopatra", Act III, Scene ix (that is not a mistake: the "sceneId" and the actual act/scene are not the same). When you present results of your queries, please use the id we created antony_and_cleopatra:2.8, rather than the traditional numbering. When you retrieve plays, you will need to use the "play_id" key rather than the "scene_id" key.
+This is from the play "Anthony and Cleopatra", Act II, Scene viii. When you present results of your queries, please use the id we created antony_and_cleopatra:2.8, rather than the traditional numbering. When you retrieve plays, you will need to use the "play_id" key rather than the "scene_id" key.
 
 Read in the tokenized and stemmed document collection provided in the assignment.
-Please use an existing JSON library for this purpose. We recommend json-simple's convenient way for Java. Python has a JSON library in the standard library which should suffice.
-Term vectors should be constructed by splitting the given text by spaces (the regex \\s+), and ignoring blank strings. You've already shown you can tokenize and stem, so we're making it easier for this project.
-Build a simple inverted index with positional information. See figure 5.5 (p.135) in the textbook. This can be constructed in memory using standard collections, though that means that every time you run the program you will need to build the index again.
-We recommend having the data storage behind your InvertedIndex being a Map<Term, List<Postings>>
-Another possible organization is to have a Map<Term, Map<DocId, Positions>>
-Postings might be a DocId and Positions pair.
-Positions might be either an int[] or a List<Integer>
-If you choose to provide a mechanism to save your inverted index to disk and to restore it from disk, we will award 10 bonus points on this assignment.
-Although the queries we have provided vary in goals, we expect you to reuse as much code as possible. It is possible to have a general query-processing technique for all of them. It should be obvious and straightforward how to run similar queries with different terms. That does not mean that you are required to create and support a query language, but it does mean that it should take very little effort to run minor variations on queries.
-One way of reusing code is to define helper functions for processes such as counting phrases and terms. Can you implement terms as phrases of length 1? Can you make aggregating by play or by scene a flag or Boolean to this process?
-P5 will involve implementing scoring functions and models on top of this framework, so putting time in now will benefit you in the next assignment.
+Please use an existing JSON library for this purpose. Python has one in the standard library which should suffice. We recommend json-simple's convenient way for Java.
+Term vectors should be constructed by splitting the given text by spaces (the regex \\s+), and ignoring blank strings.
+Build a simple inverted index with positional information. (See figure 5.5 in your text on page 135). This can be constructed in memory using standard collections. This was part of assignment P4. For this assignment, positional information is not needed, only count information.
+Read ahead and consider whether there is other information you need to calculate the required scores, and be sure you collect it at indexing time.
+Scoring
+BM25
+
+See page 250 of the textbook. Please use the following values: k1=1.2, k2=100. Yes, you will have to make decisions about other variables in the equation.
+
+Language-Modeling or Query-Likelihood (QL)
+
+See page 257 of the textbook, specifically the version implemented with Jelinek-Mercer smoothing. Please use the following values: lambda=0.8.
+
 Evaluation
-We provide a number of "queries" specified in plain English. Please try to satisfy the information need described in the query. If there are any ambiguities, report these in your discussion.
+We provide a number of "queries" specified in plain English. Please run these queries under both the language-modeling and BM25 frameworks.
 
-Note that because these queries do not require a ranking, we expect you to save the documents retrieved as a set. Please alphabetize your lists.
+Please output the results of these queries in trecrun format.
 
-Term-based Queries
+TREC Run format
 
-Answer the following Boolean/counting queries using your index. Save the required output to the named file.
+Output Format for QL and BM25 tasks.
 
-terms0.txt Find scene(s) where "thee" or "thou" is used more than "you"
-terms1.txt Find scene(s) where Verona, Rome, or Italy is mentioned.
-terms2.txt Find the play(s) where "falstaff" is mentioned.
-terms3.txt Find the play(s) where "soldier" is mentioned.
-Phrase-based Queries
+For both tasks, a submission consists of a single text file in the format used for most TREC submissions, which we repeat here for convenience. White space is used to separate columns. The width of the columns in the format is not important, but it is important to have exactly six columns per line with at least one space between the columns.
 
-Answer the following queries using your index. For these you will need to use positional information. Save the required output to the named file.
+Q1 skip alls_well_that_ends_well:0.0             1 1.000 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:0.1             2 0.500 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:0.2             3 0.333 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:1.0             4 0.250 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:1.1             5 0.200 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:1.2             6 0.167 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:1.3             7 0.143 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:1.4             8 0.125 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:2.1             9 0.111 jjfoley-alphabetic
+Q1 skip alls_well_that_ends_well:2.4             10 0.100 jjfoley-alphabetic 
+...
+Q1 skip winters_tale:4.0                         399 0.003 jjfoley-alphabetic
+Q1 skip winters_tale:4.1                         400 0.003 jjfoley-alphabetic
+Q1 skip winters_tale:4.2                         401 0.002 jjfoley-alphabetic
+...
+Q2 skip alls_well_that_ends_well:0.0             1 1.000 jjfoley-alphabetic
+Q2 skip alls_well_that_ends_well:0.2             2 0.500 jjfoley-alphabetic
+Q2 skip alls_well_that_ends_well:1.0             3 0.333 jjfoley-alphabetic
+Q2 skip alls_well_that_ends_well:1.2             4 0.250 jjfoley-alphabetic
+...
+Q5 skip winters_tale:1.0                         210 0.005 jjfoley-alphabetic
+Q5 skip winters_tale:2.1                         211 0.005 jjfoley-alphabetic
+Q5 skip winters_tale:3.3                         212 0.005 jjfoley-alphabetic
+etc. where:
 
-phrase0.txt Find scene(s) where "lady macbeth" is mentioned.
-phrase1.txt Find the scene(s) where "a rose by any other name" is mentioned.
-phrase2.txt Find the scene(s) where "cry havoc" is mentioned.
-Grading Rubric
-(10%) Submission is in the correct format.
+the first column is the topic number.
+the second column is currently unused and should always be "skip".
+the third column is the scene identifier of the retrieved document.
+the fourth column is the rank the document is retrieved. You will list things sorted by rank within query.
+the fifth column shows the score (integer or floating point) that generated the ranking. This score must be in descending (non-increasing) order.
+the sixth column is called the "run tag" and is traditionally a unique identifier for your group AND for the method used. That is, each run should have a different tag that identifies the group and the method that produced the run.
+Use your OIT identifier, and either bm25 or ql. You will not be producing alphabetic runs this time.
+e.g. jjfoley-bm25 and jjfoley-ql
+Please do not turn in results with the TA's OIT identifer.
+Queries
 
-A single archive file (zip, tar.gz) was submitted to Moodle and it contains at least the following contents:
-
-report.pdf - your report (see below)
-
-src/* - your source code
-
-README
-It has instructions for downloading dependencies the code.
-It has instructions for building the code.
-It has instructions for running the code.
-Query Output Files: these should contain either scene ids or play ids describing the results of the queries. Because the queries are Boolean, there is no ranking required, please order alphabetically.
-terms1.txt, terms2.txt, terms3.txt, terms4.txt
-phrase1.txt, phrase2.txt, phrase3.txt
+Q1: the king queen royalty
+Q2: servant guard soldier
+Q3: hope dream sleep
+Q4: ghost spirit
+Q5: fool jester player
+Q6: to be or not to be
