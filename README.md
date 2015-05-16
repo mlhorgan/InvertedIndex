@@ -1,6 +1,6 @@
 # InvertedIndex
 
-mplement an Inverted Index with Positional Information.
+Implement an Inverted Index with Positional Information.
 Dataset
 
 The dataset is the scenes from the complete works of Shakespeare. This data has been tokenized and is made available as shakespeare-scenes.json.gz on Moodle. If you're curious, the original source of the materials (from Open Shakespeare) is here.
